@@ -2,21 +2,18 @@
 
 require_once 'vendor/autoload.php';
 
-function printResponse(array $response) {
-    header('content-type: text/plain; version=0.0.4');
-
-    foreach ($response as $key => $val) {
-        echo "$key $val\n";
-    }
+if (!array_key_exists('eventId', $_GET)) {
+    $_GET['eventId'] = '9c32f00e-f025-41e5-88ce-bbcb2d9c7e24';
 }
 
-function log1(string $log) {
-    $log = sprintf(
-        "[%s] %s\n",
-        (new \DateTime)->format('c'),
-        $log
-    );
-    file_put_contents('ges.log', $log , FILE_APPEND);
+$eventId = filter_var(
+    $_GET['eventId'],
+    FILTER_VALIDATE_REGEXP,
+    ['options' => ['regexp' => '/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$/i']]
+);
+
+if ($eventId === false) {
+    die("invalid eventId");
 }
 
 $response = [
@@ -30,7 +27,7 @@ $client = new GuzzleHttp\Client();
 
 try {
     $res = $client->request('GET',
-                            'https://v-a-c-special.lastick.ru/api/widget/v1/schedule/9c32f00e-f025-41e5-88ce-bbcb2d9c7e24/tickets',
+                            "https://v-a-c-special.lastick.ru/api/widget/v1/schedule/$eventId/tickets",
                             [
                                 'headers' => [
                                     'authority' => 'v-a-c-special.lastick.ru',
@@ -99,3 +96,22 @@ $response['is_active'] = (int)$tickets['is_active'];
 $response['is_for_booking'] = (int)$tickets['is_for_booking'];
 
 printResponse($response);
+
+//---
+
+function printResponse(array $response) {
+    header('content-type: text/plain; version=0.0.4');
+
+    foreach ($response as $key => $val) {
+        echo "$key $val\n";
+    }
+}
+
+function log1(string $log) {
+    $log = sprintf(
+        "[%s] %s\n",
+        (new \DateTime)->format('c'),
+        $log
+    );
+    file_put_contents('ges.log', $log , FILE_APPEND);
+}
