@@ -1,0 +1,20 @@
+{
+    "description": "ges-parser",
+    "type": "project",
+    "require": {
+        "php": "^8.0",
+        "guzzlehttp/guzzle": "^7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": ""
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
