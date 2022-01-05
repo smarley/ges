@@ -95,15 +95,15 @@ $response['is_for_sale'] = (int)$tickets['is_for_sale'];
 $response['is_active'] = (int)$tickets['is_active'];
 $response['is_for_booking'] = (int)$tickets['is_for_booking'];
 
-printResponse($response);
+printResponse($response, $eventId);
 
 //---
 
-function printResponse(array $response) {
+function printResponse(array $response, string $eventId) {
     header('content-type: text/plain; version=0.0.4');
 
     foreach ($response as $key => $val) {
-        echo "$key $val\n";
+        echo "$key{eventId=\"$eventId\"} $val\n";
     }
 }
 
