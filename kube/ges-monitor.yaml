@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ges-app
+  labels:
+    team: frontend
+spec:
+  selector:
+    matchLabels:
+      app: ges-app
+  endpoints:
+  - port: web
+    path: /app.php
+    interval: 1m
+    scrapeTimeout: 10s
+    params:
+      eventId: 
+        # test event
+        # - fa9a7f4a-2411-4a00-8f3f-d679862b4444
+        - 9c32f00e-f025-41e5-88ce-bbcb2d9c7e24
