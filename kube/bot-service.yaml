@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: bot-app
+  labels:
+    app: bot-app
+spec:
+  selector:
+    app: bot-app
+  ports:
+  - name: web
+    port: 9087

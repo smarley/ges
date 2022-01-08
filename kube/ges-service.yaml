@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ges-app
+  labels:
+    app: ges-app
+spec:
+  selector:
+    app: ges-app
+  ports:
+  - name: web
+    port: 80

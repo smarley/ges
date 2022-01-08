@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bot-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bot-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: bot-app
+    spec:
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: bot-secret
+      containers:
+      - name: bot-app
+        image: dr.senz.su/prometheus_bot:0.1.2
+        command: ["/prometheus_bot"]
+        args: ["-c", "/etc/telegrambot/config.yaml" , "-l", ":9087", "-t", "/etc/telegrambot/template.tmpl", "-d"]
+        volumeMounts:
+          - name: secret-volume
+            mountPath: /etc/telegrambot
+        ports:
+        - name: web
+          containerPort: 9087
+      imagePullSecrets:
+        - name: dr-senz-su
